@@ -1,0 +1,52 @@
+// intatial flutter main dart
+import 'package:cycle_rent/home/homePage.dart';
+import 'package:cycle_rent/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'firebase_options.dart';
+
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform
+  );
+  runApp( MyApp());
+}
+
+class MyApp extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        // This is the theme of your application.
+        primarySwatch: Colors.green,
+      ),
+      home: Mainpage(),
+    );
+
+}}
+class Mainpage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context)=>Scaffold(
+
+    body: StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot){
+        return MyStatefulWidget();{
+          if(snapshot.hasData){
+            return Home();
+          }
+          else{
+            return MyStatefulWidget();
+          }
+        }
+      },
+    ),
+  ) ;
+
+
+}
